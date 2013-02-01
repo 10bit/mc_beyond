@@ -9,6 +9,7 @@
 // ==/UserScript==
 
 // 2013.01.31 	1.00	移植開始
+// 2013.02.01           技術研究所のLvup可否表示が動作していなかったのを修正
 
 // ＊＊ 移植メモ ＊＊
 
@@ -1360,7 +1361,7 @@
         costs['装甲研究所'] = cost_bougu;
         costs['レーダーサイト'] = cost_mihari;
         costs['備蓄基地'] = cost_souko;
-        costs['備蓄基地'] = cost_kenkyu;
+        costs['技術研究所'] = cost_kenkyu;
         costs['貿易センター'] = cost_ichiba;
         costs['食品冷凍工場'] = cost_suisya;
         costs['化学コンビナート'] = cost_kojo;
