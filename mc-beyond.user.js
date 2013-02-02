@@ -4,7 +4,7 @@
 // @description    ＭＣ☆あくしず Beyond
 // @author         gozen
 // @include        http://*.bmcaxis.jp/*
-// @icon           https://raw.github.com/5zen/fake3gokushi/master/icon.png
+// @icon           https://raw.github.com/5zen/mc_beyond/master/icon.png
 // @version        1.01
 // ==/UserScript==
 
