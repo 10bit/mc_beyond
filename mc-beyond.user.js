@@ -5,11 +5,12 @@
 // @author         gozen
 // @include        http://*.bmcaxis.jp/*
 // @icon           https://raw.github.com/5zen/fake3gokushi/master/icon.png
-// @version        1.00
+// @version        1.01
 // ==/UserScript==
 
 // 2013.01.31 	1.00	移植開始
 // 2013.02.01           技術研究所のLvup可否表示が動作していなかったのを修正
+// 2013.02.02	1.01	ＨＰ回復時間・討伐回復時間を表示するように修正
 
 // ＊＊ 移植メモ ＊＊
 
@@ -17,15 +18,10 @@
 // ◯ 施設建設可否・建設中・破棄中表示
 // ◯ 拠点リストに内政・援軍等リンク追加
 // ◯ メモ機能
-// △ 同盟表示強化									同盟員情報CSV のみ未動作 とりあえず放置
-// × ブックマーク									大幅に手直し必要
 // ◯ 座標リンク
 // ◯ 戦争ログ整形
-// △ 戦争ログ合計表示								多分大丈夫だけど未テスト
-// × デッキ画面改善								もともと未使用
 // ◯ 建設時：完了日時表示
 // ◯ 兵作成：完了日時表示
-// × 資源生産量合計表示							表示場所がない
 // ◯ 倉庫溢れ or 建設可能までの資源生産時間表示	リアルタイムではない
 // ◯ 建設・破棄一覧
 // ◯ 地形一覧表示									ただし mc_npc_castle_info と競合する
@@ -34,26 +30,33 @@
 // ◯ マップ中央表示
 // ◯ 書簡・報告書削除ボタン
 // ◯ 出発時間計算
-// × 小さいボタン									必要無さそうなので無効化
 // ◯ 出兵状況マップ表示
 // ◯ 合成支援ボタン
-// × ヨロズ引き忘れ防止							ヨロズないんや
-// × ＨＰ回復時間表示								そのうち直す
-// × 討伐回復時間表示								そのうち直す
-// × 座標入力支援									いらなくね？
 // ◯ トレード入力支援
 // ◯ 拠点生産量表示
 // ◯ 名声タイマー
-// × タイマー格納									いらなくね？
 // ◯ ログ表示
 // ◯ 同盟・君主表示ツールチップ表示
+// ○ ＨＰ回復時間表示
+// ○ 討伐回復時間表示
+
 // △ 飛行場・航空基地がないためテストできない
+// △ 戦争ログ合計表示								多分大丈夫だけど未テスト
+// △ 同盟表示強化									同盟員情報CSV のみ未動作 とりあえず放置
+
+// × ブックマーク									大幅に手直し必要
+// × デッキ画面改善								もともと未使用
+// × 資源生産量合計表示							表示場所がない
+// × 小さいボタン									必要無さそうなので無効化
+// × ヨロズ引き忘れ防止							ヨロズないんや
+// × 座標入力支援									いらなくね？
+// × タイマー格納									いらなくね？
 
 ( function() {
     if (document.getElementById('beyond_basepanel')) return ;
 
     var PROGRAM_NAME = 'MC☆Beyond';
-    var VERSION = '1.00.0.0';
+    var VERSION = '1.01';
     var DIST_SRC = 'http://www1.ocn.ne.jp/~hatt/3gkb/';
     var IMG_DIR = '/20120424-01/img/';
 
@@ -2408,9 +2411,9 @@
             tmpHTML = tmpHTML.replace(reg,
                 function() {
                     var txt = '<table class="tables"><tr><th class="solClass">　</th>' +
-                                '<th class="solClass">新兵</th><th class="solClass">軽戦車</th><th class="solClass">水雷艇</th><th class="solClass">軽戦闘機</th>' +
-                                '<th class="solClass">重戦車</th><th class="solClass">駆逐艦</th><th class="solClass">重戦闘機</th><th class="solClass">工作員</th>' +
-                                '<th class="solClass">特殊部隊</th><th class="solClass">工兵</th><th class="solClass">自走臼砲</th><th class="solClass">ユニット</th>' +
+                                '<th class="solClass">新兵</th><th class="solClass">軽戦車</th><th class="solClass">水雷艇</th><th class="solClass">軽戦<br>闘機</th>' +
+                                '<th class="solClass">重戦車</th><th class="solClass">駆逐艦</th><th class="solClass">重戦<br>闘機</th><th class="solClass">工作員</th>' +
+                                '<th class="solClass">特殊<br>部隊</th><th class="solClass">工兵</th><th class="solClass">自走<br>臼砲</th><th class="solClass">ユニット</th>' +
                                 '</tr><tr><th class="solClass">兵士</th>';
                     for (var i = 2; i <= 13; i++) {
                         txt += '<td>' + arguments[i] + '</td>';
@@ -2428,9 +2431,9 @@
             tmpHTML = tmpHTML.replace(reg,
                 function() {
                     var txt = '<table class="tables"><tr><th class="solClass">　</th>' +
-                                '<th class="solClass">剣兵</th><th class="solClass">軽戦車</th><th class="solClass">水雷艇</th><th class="solClass">軽戦闘機</th>' +
-                                '<th class="solClass">重戦車</th><th class="solClass">駆逐艦</th><th class="solClass">重戦闘機</th><th class="solClass">工作員</th>' +
-                                '<th class="solClass">特殊部隊</th><th class="solClass">工兵</th><th class="solClass">自走臼砲</th><th class="solClass">ユニット</th>' +
+                                '<th class="solClass">剣兵</th><th class="solClass">軽戦車</th><th class="solClass">水雷艇</th><th class="solClass">軽戦<br>闘機</th>' +
+                                '<th class="solClass">重戦車</th><th class="solClass">駆逐艦</th><th class="solClass">重戦<br>闘機</th><th class="solClass">工作員</th>' +
+                                '<th class="solClass">特殊<br>部隊</th><th class="solClass">工兵</th><th class="solClass">自走<br>臼砲</th><th class="solClass">ユニット</th>' +
                                 '</tr><tr><th class="solClass">兵士</th>';
                     for (var i = 2; i <= 13; i++) {
                         txt += '<td>' + arguments[i] + '</td>';
@@ -6297,32 +6300,36 @@
     }
 
     function displayRecoveryEstimates() {
+
+console.log("== START displayRecoveryEstimates ==");
+
         var candidates = $x('id("deck_file")//div[contains(concat(" ", normalize-space(@class), " "), " setPlace ") and contains(concat(" ", normalize-space(@class), " "), " false ")]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " cardStatusDetail ")]');
+
+		// ９・１２・１５枚表示
         for (var i = 0; i < candidates.length; ++i) {
-            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level_")]', candidates[i]).innerHTML;
-            var hp    = + candidates[i].getElementsByClassName('status_hp')
-                            [0].textContent.toString().split(/[\/]/)[0];
+            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level")]', candidates[i]).innerHTML.match(/(-?\d+)/)[0];
+            var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
             if (hp >= 100) continue;
             var hours = (level <= 5) ? Math.pow(2, level - 2) * (100 - hp) / 100 :
                             (level <= 10) ? 4 * (level - 3) * (100 - hp) / 100 :
                                 (level + 20) * (100 - hp) / 100;
-
             var msg  = formatEstimate(hours, false) + 'にHP全回復';
             candidates[i].getElementsByClassName('setPlace false')[0].innerHTML = msg;
             candidates[i].getElementsByClassName('setPlace false')[0].setAttribute('title', getTimeString(hours));
         }
 
+		// カード表示
         candidates = $x('id("deck_file")//div[contains(concat(" ", normalize-space(@class), " "), " control ")]/dl/dd[contains(text(), "治療中")]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " cardColmn ")]');
          for (var i = 0; i < candidates.length; ++i) {
-            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level_")]', candidates[i]).innerHTML;
-            var hp    = + candidates[i].getElementsByClassName('status_hp')
-                            [0].textContent.toString().split(/[\/]/)[0];
+//            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level_")]', candidates[i]).innerHTML;
+            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level")]', candidates[i]).innerHTML.match(/(-?\d+)/)[0];
+            var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
             if (hp >= 100) continue;
 
             var hours = (level <= 5) ? Math.pow(2, level - 2) * (100 - hp) / 100 :
                             (level <= 10) ? 4 * (level - 3) * (100 - hp) / 100 :
                                 (level + 20) * (100 - hp) / 100;
-            var msg  = formatEstimate(hours, false) + 'に<br>HP全回復';
+            var msg  = formatEstimate(hours, false) + '<br>にHP全回復';
             candidates[i].getElementsByTagName('dd')[2].innerHTML = msg;
             candidates[i].getElementsByTagName('dd')[2].style.fontSize = "10px";
             candidates[i].getElementsByTagName('dd')[2].style.margin = "0px";
