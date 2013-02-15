@@ -5,12 +5,13 @@
 // @author         gozen
 // @include        http://*.bmcaxis.jp/*
 // @icon           https://raw.github.com/5zen/mc_beyond/master/icon.png
-// @version        1.01
+// @version        1.02
 // ==/UserScript==
 
 // 2013.01.31 	1.00	移植開始
 // 2013.02.01           技術研究所のLvup可否表示が動作していなかったのを修正
 // 2013.02.02	1.01	ＨＰ回復時間・討伐回復時間を表示するように修正
+// 2013.02.16   1.02	ＵＲのＨＰ回復時間が計算できていなかったのを修正
 
 // ＊＊ 移植メモ ＊＊
 
@@ -56,7 +57,7 @@
     if (document.getElementById('beyond_basepanel')) return ;
 
     var PROGRAM_NAME = 'MC☆Beyond';
-    var VERSION = '1.01';
+    var VERSION = '1.02';
     var DIST_SRC = 'http://www1.ocn.ne.jp/~hatt/3gkb/';
     var IMG_DIR = '/20120424-01/img/';
 
@@ -6305,10 +6306,17 @@ console.log("== START displayRecoveryEstimates ==");
 
         var candidates = $x('id("deck_file")//div[contains(concat(" ", normalize-space(@class), " "), " setPlace ") and contains(concat(" ", normalize-space(@class), " "), " false ")]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " cardStatusDetail ")]');
 
+console.log(candidates.length);
+
 		// ９・１２・１５枚表示
         for (var i = 0; i < candidates.length; ++i) {
             var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level")]', candidates[i]).innerHTML.match(/(-?\d+)/)[0];
-            var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
+console.log(level);
+            var hp    = + $s('.//span[contains(concat(" ", normalize-space(@class)), " status_hp")]', candidates[i]).innerHTML.split(/[\/]/)[0];
+//          var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
+console.log(level + " HP:" + hp);
+
+
             if (hp >= 100) continue;
             var hours = (level <= 5) ? Math.pow(2, level - 2) * (100 - hp) / 100 :
                             (level <= 10) ? 4 * (level - 3) * (100 - hp) / 100 :
@@ -6321,9 +6329,10 @@ console.log("== START displayRecoveryEstimates ==");
 		// カード表示
         candidates = $x('id("deck_file")//div[contains(concat(" ", normalize-space(@class), " "), " control ")]/dl/dd[contains(text(), "治療中")]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " cardColmn ")]');
          for (var i = 0; i < candidates.length; ++i) {
-//            var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level_")]', candidates[i]).innerHTML;
+//          var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level_")]', candidates[i]).innerHTML;
             var level = + $s('.//span[contains(concat(" ", normalize-space(@class)), " level")]', candidates[i]).innerHTML.match(/(-?\d+)/)[0];
-            var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
+//          var hp    = + candidates[i].getElementsByClassName('status_hp')[0].textContent.toString().split(/[\/]/)[0];
+            var hp    = + $s('.//span[contains(concat(" ", normalize-space(@class)), " status_hp")]', candidates[i]).innerHTML.split(/[\/]/)[0];
             if (hp >= 100) continue;
 
             var hours = (level <= 5) ? Math.pow(2, level - 2) * (100 - hp) / 100 :
@@ -6362,7 +6371,7 @@ console.log("== START displayRecoveryEstimates ==");
         else msg = delta + '日後';
 
         msg += xday.getHours() + '時';
-        msg += xday.getMinutes() + '分 ';
+        msg += xday.getMinutes() + '分';
 
         if (days == 0) {
             var seconds = Math.floor((hours * 3600) % 60);
@@ -6371,12 +6380,12 @@ console.log("== START displayRecoveryEstimates ==");
 
             if (hours == 0) {
                 if (displaySecs) {
-                    msg += '(' + minutes + '分' + seconds + '秒後) ';
+                    msg += '(' + minutes + '分' + seconds + '秒後)';
                 } else {
-                    msg += '(' + minutes + '分後) ';
+                    msg += '(' + minutes + '分後)';
                 }
             } else {
-                msg += '(' + hours+ '時間' + minutes +'分後) ';
+                msg += '(' + hours+ '時間' + minutes +'分後)';
             }
         }
         return msg;
